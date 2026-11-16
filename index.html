@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مديرية الشئون الصحية بسوهاج - لوحة تحكم تجهيزات الأقسام</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        navy: { 800: '#0f2042', 900: '#0a162e', 950: '#050c1b' },
+                        maroon: { 700: '#881337', 800: '#800020', 900: '#4c0519' },
+                        emerald: { 500: '#10b981', 600: '#059669' },
+                        amber: { 500: '#f59e0b' },
+                        rose: { 500: '#f43f5e', 600: '#e11d48' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #f3f4f6; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-btn { transition: all 0.25s ease-in-out; white-space: nowrap; }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #0f2042 0%, #800020 100%);
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(128, 0, 32, 0.25);
+            border-bottom: 3px solid #f59e0b;
+        }
+        .kpi-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col bg-slate-100">
+
+    <!-- Top Executive Header -->
+    <header class="bg-gradient-to-r from-navy-950 via-navy-900 to-maroon-900 text-white shadow-lg border-b border-slate-700/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-24">
+                <div class="flex items-center space-x-4 space-x-reverse">
+                    <div class="relative w-14 h-14 bg-white rounded-full p-1 shadow-md border-2 border-amber-400/50 flex items-center justify-center shrink-0">
+                        <img src="لوجو مركز المعلومات.png" 
+                             alt="لوجو مديرية الشئون الصحية بسوهاج" 
+                             class="w-full h-full object-contain rounded-full"
+                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full rounded-full bg-navy-900 text-amber-300 flex items-center justify-center font-bold text-xs text-center p-1\'>الصحة</div>';" />
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black tracking-wide text-white leading-tight">
+                            مديرية الشئون الصحية بسوهاج
+                        </h1>
+                        <div class="flex items-center space-x-2 space-x-reverse text-amber-300 text-xs sm:text-sm font-semibold mt-1">
+                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span>نظم المعلومات والتحول الرقمي</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="bg-gradient-to-r from-maroon-800 to-navy-900 text-white px-4 py-2 rounded-2xl border border-amber-400/30 text-xs sm:text-sm font-black shadow-lg flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-amber-300 text-base"></i>
+                        <span>تجهيزات الأقسام شهر أكتوبر 2026 م</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs Bar -->
+        <div class="bg-slate-900/95 border-t border-slate-800 px-2 sm:px-6 backdrop-blur-md">
+            <div class="max-w-7xl mx-auto">
+                <nav class="flex space-x-1 sm:space-x-2 space-x-reverse overflow-x-auto no-scrollbar py-2 text-sm" id="nav-tabs">
+                    <button onclick="switchTab('beds')" class="tab-btn active text-slate-300 hover:text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-bed"></i><span>الأسرة</span>
+                    </button>
+                    <button onclick="switchTab('equipment')" class="tab-btn text-slate-300 hover:text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-toolbox"></i><span>التجهيزات</span>
+                    </button>
+                    <button onclick="switchTab('xray')" class="tab-btn text-slate-300 hover:text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-x-ray"></i><span>أجهزة الأشعة</span>
+                    </button>
+                    <button onclick="switchTab('dialysis')" class="tab-btn text-slate-300 hover:text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-droplet"></i><span>أجهزة الغسيل الكلوي</span>
+                    </button>
+                    <button onclick="switchTab('blood')" class="tab-btn text-slate-300 hover:text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-hand-holding-medical"></i><span>بنوك الدم</span>
+                    </button>
+                    <button onclick="switchTab('morgue')" class="tab-btn text-slate-300 hover:text-white px-4 py-2.5 rounded-xl font-medium flex items-center gap-2">
+                        <i class="fa-solid fa-temperature-low"></i><span>ثلاجات الموتى</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+        <!-- ================= TAB 1: الأسرة ================= -->
+        <div id="tab-beds" class="tab-content space-y-6">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-hospital text-blue-600 ml-1"></i>المستشفيات</label>
+                    <select id="beds-hosp" onchange="renderBeds()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع المستشفيات</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-sitemap text-indigo-600 ml-1"></i>القسم</label>
+                    <select id="beds-dept" onchange="renderBeds()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع الأقسام</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-emerald-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">المفعل</p>
+                    <h3 id="beds-kpi-active" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-amber-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">الغير مفعل</p>
+                    <h3 id="beds-kpi-inactive" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-blue-600 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">الإجمالي</p>
+                    <h3 id="beds-kpi-total" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+                <h2 class="text-base font-bold text-slate-800 mb-4"><i class="fa-solid fa-bed text-blue-600 ml-2"></i>تفصيلي الأسرة حسب الأقسام</h2>
+                <div id="beds-dept-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: التجهيزات ================= -->
+        <div id="tab-equipment" class="tab-content space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-hospital text-blue-600 ml-1"></i>المستشفى</label>
+                    <select id="eq-hosp" onchange="renderEquipment()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع المستشفيات</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-sitemap text-indigo-600 ml-1"></i>القسم</label>
+                    <select id="eq-dept" onchange="renderEquipment()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع الأقسام</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-toolbox text-emerald-600 ml-1"></i>الجهاز</label>
+                    <select id="eq-device" onchange="renderEquipment()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع الأجهزة</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-emerald-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">مفعل</p>
+                    <h3 id="eq-kpi-active" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-amber-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">غير مفعل</p>
+                    <h3 id="eq-kpi-inactive" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-rose-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">معطل</p>
+                    <h3 id="eq-kpi-broken" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-blue-600 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">إجمالي</p>
+                    <h3 id="eq-kpi-total" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b bg-slate-50"><h2 class="font-bold text-slate-800">بيانات التجهيزات</h2></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-xs text-slate-600 uppercase">
+                            <tr>
+                                <th class="px-4 py-3">المستشفى</th>
+                                <th class="px-4 py-3">القسم</th>
+                                <th class="px-4 py-3">اسم الجهاز</th>
+                                <th class="px-4 py-3 text-center text-emerald-700">مفعل</th>
+                                <th class="px-4 py-3 text-center text-amber-700">غير مفعل</th>
+                                <th class="px-4 py-3 text-center text-rose-700">معطل</th>
+                                <th class="px-4 py-3 text-center">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eq-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: أجهزة الأشعة ================= -->
+        <div id="tab-xray" class="tab-content space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-hospital text-blue-600 ml-1"></i>المستشفى</label>
+                    <select id="xray-hosp" onchange="renderXray()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع المستشفيات</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-sitemap text-indigo-600 ml-1"></i>القسم</label>
+                    <select id="xray-dept" onchange="renderXray()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع الأقسام</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-x-ray text-emerald-600 ml-1"></i>الجهاز</label>
+                    <select id="xray-device" onchange="renderXray()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                        <option value="ALL">جميع أجهزة الأشعة</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-emerald-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">مفعل</p>
+                    <h3 id="xray-kpi-active" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-amber-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">غير مفعل</p>
+                    <h3 id="xray-kpi-inactive" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-rose-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">معطل</p>
+                    <h3 id="xray-kpi-broken" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-blue-600 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">إجمالي</p>
+                    <h3 id="xray-kpi-total" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b bg-slate-50"><h2 class="font-bold text-slate-800">بيانات أجهزة الأشعة</h2></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-xs text-slate-600 uppercase">
+                            <tr>
+                                <th class="px-4 py-3">المستشفى</th>
+                                <th class="px-4 py-3">القسم</th>
+                                <th class="px-4 py-3">اسم الجهاز</th>
+                                <th class="px-4 py-3 text-center text-emerald-700">مفعل</th>
+                                <th class="px-4 py-3 text-center text-amber-700">غير مفعل</th>
+                                <th class="px-4 py-3 text-center text-rose-700">معطل</th>
+                                <th class="px-4 py-3 text-center">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="xray-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 4: أجهزة الغسيل الكلوي ================= -->
+        <div id="tab-dialysis" class="tab-content space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-hospital text-blue-600 ml-1"></i>المستشفى</label>
+                <select id="dialysis-hosp" onchange="renderDialysis()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                    <option value="ALL">جميع المستشفيات</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-emerald-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">مفعل</p>
+                    <h3 id="dialysis-kpi-active" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-amber-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">غير مفعل</p>
+                    <h3 id="dialysis-kpi-inactive" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-rose-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">معطل</p>
+                    <h3 id="dialysis-kpi-broken" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-blue-600 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">إجمالي</p>
+                    <h3 id="dialysis-kpi-total" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b bg-slate-50"><h2 class="font-bold text-slate-800">بيانات أجهزة الغسيل الكلوي</h2></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-xs text-slate-600 uppercase">
+                            <tr>
+                                <th class="px-4 py-3">المستشفى</th>
+                                <th class="px-4 py-3">القسم</th>
+                                <th class="px-4 py-3">اسم الجهاز</th>
+                                <th class="px-4 py-3 text-center text-emerald-700">مفعل</th>
+                                <th class="px-4 py-3 text-center text-amber-700">غير مفعل</th>
+                                <th class="px-4 py-3 text-center text-rose-700">معطل</th>
+                                <th class="px-4 py-3 text-center">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dialysis-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: بنوك الدم ================= -->
+        <div id="tab-blood" class="tab-content space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-hospital text-blue-600 ml-1"></i>المستشفى</label>
+                <select id="blood-hosp" onchange="renderBlood()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                    <option value="ALL">جميع المستشفيات</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-indigo-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">تجميعي</p>
+                    <h3 id="blood-kpi-col" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-amber-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">تخزيني</p>
+                    <h3 id="blood-kpi-stor" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-blue-600 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">إجمالي</p>
+                    <h3 id="blood-kpi-total" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b bg-slate-50"><h2 class="font-bold text-slate-800">بيانات بنوك الدم</h2></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-xs text-slate-600 uppercase">
+                            <tr>
+                                <th class="px-4 py-3">المستشفى</th>
+                                <th class="px-4 py-3">القسم</th>
+                                <th class="px-4 py-3">التجهيز / الجهاز</th>
+                                <th class="px-4 py-3 text-center">تجميعي</th>
+                                <th class="px-4 py-3 text-center">تخزيني</th>
+                                <th class="px-4 py-3 text-center">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blood-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 6: ثلاجات الموتى ================= -->
+        <div id="tab-morgue" class="tab-content space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+                <label class="block text-xs font-bold text-slate-600 mb-1.5"><i class="fa-solid fa-hospital text-blue-600 ml-1"></i>المستشفى</label>
+                <select id="morgue-hosp" onchange="renderMorgue()" class="w-full bg-slate-50 border border-slate-300 text-sm font-semibold rounded-xl p-2.5">
+                    <option value="ALL">جميع المستشفيات</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-emerald-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">عيون الموتى (مفعل)</p>
+                    <h3 id="morgue-eyes-active" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-amber-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">عيون الموتى (غير مفعل)</p>
+                    <h3 id="morgue-eyes-inactive" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-blue-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">الثلاجات (مفعل)</p>
+                    <h3 id="morgue-fridges-active" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+                <div class="kpi-card bg-white p-5 rounded-2xl border-b-4 border-rose-500 shadow-sm">
+                    <p class="text-xs font-bold text-slate-500">الثلاجات (غير مفعل)</p>
+                    <h3 id="morgue-fridges-inactive" class="text-3xl font-black text-slate-900 mt-1">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-4 border-b bg-slate-50"><h2 class="font-bold text-slate-800">بيانات ثلاجات الموتى وعيون الحفظ</h2></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-xs text-slate-600 uppercase">
+                            <tr>
+                                <th class="px-4 py-3">المستشفى</th>
+                                <th class="px-4 py-3">القسم</th>
+                                <th class="px-4 py-3">الببند</th>
+                                <th class="px-4 py-3 text-center text-emerald-700">مفعل</th>
+                                <th class="px-4 py-3 text-center text-amber-700">غير مفعل</th>
+                                <th class="px-4 py-3 text-center">الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody id="morgue-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Executive Footer -->
+    <footer class="bg-slate-900 text-white text-xs py-6 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right">
+                <div class="flex items-center gap-2 bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-700">
+                    <i class="fa-solid fa-pen-nib text-amber-400"></i>
+                    <span>إعداد: <strong class="text-white text-sm">مرتينا مكرم</strong></span>
+                </div>
+                <div class="text-slate-400">
+                    <p class="font-semibold">مديرية الشئون الصحية بسوهاج © أكتوبر 2026</p>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-800 px-4 py-2.5 rounded-xl border border-slate-700">
+                    <i class="fa-solid fa-user-tie text-emerald-400"></i>
+                    <span>مدير نظم المعلومات والتحول الرقمي: <strong class="text-white text-sm">د / بيشوي قصدي بشارة</strong></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Embedded Dataset & App Logic -->
+    <script>
+        const allData = [
+            // Embedded Dataset from Google Sheets
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "cpap", active: 5, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "أجهزة التدفئة", active: 2, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "أجهزة علاج ضوئي", active: 14, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "اجمالى اجهزة التنفس الصناعى", active: 1, inactive: 0, broken: 1},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "الأسرة", active: 17, inactive: 3, broken: 1},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "جهاز تنفس صناعى داخل الحضانات", active: 1, inactive: 0, broken: 1},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "سرنجة كهربائية", active: 10, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "كبسولة", active: 1, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "كراش كارت", active: 1, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "مخارج الاكسجين", active: 19, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الحضانات", device: "مونيتور", active: 11, inactive: 0, broken: 2},
+            {hospital: "أخميم المركزى", dept: "الداخلى", device: "الأسرة", active: 46, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الرعاية المتوسطة كبار", device: "الأسرة", active: 10, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الرعاية المتوسطة كبار", device: "رسم القلب", active: 1, inactive: 1, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الرعاية المتوسطة كبار", device: "سرنجة كهربائية", active: 2, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الرعاية المتوسطة كبار", device: "مخارج الاكسجين", active: 14, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الرعاية المتوسطة كبار", device: "مضخة محاليل", active: 3, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الرعاية المتوسطة كبار", device: "مونيتور", active: 8, inactive: 0, broken: 1},
+            {hospital: "أخميم المركزى", dept: "الطوارئ", device: "الأسرة", active: 11, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الطوارئ", device: "الكراش كارت", active: 1, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الطوارئ", device: "جهاز رسم قلب", active: 1, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الطوارئ", device: "جهاز صدمات كهربائية", active: 1, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الطوارئ", device: "مخارج الاكسجين", active: 8, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "الطوارئ", device: "مونيتور", active: 11, inactive: 0, broken: 0},
+            {hospital: "أخميم المركزى", dept: "بنوك الدم", device: "بنوك الدم تجميعي وتخزيني", active: 1, inactive: 1, broken: 0},
+            {hospital: "أخميم المركزى", dept: "ثلاجات الموتي", device: "عدد عيون الموتى وثلاجات", active: 3, inactive: 0, broken: 2},
+            {hospital: "سوهاج العام", dept: "الداخلى", device: "الأسرة", active: 164, inactive: 0, broken: 164},
+            {hospital: "سوهاج العام", dept: "الرعاية المركزة كبار", device: "الأسرة", active: 33, inactive: 0, broken: 33},
+            {hospital: "سوهاج العام", dept: "الرعاية المركزة كبار", device: "مونيتور", active: 42, inactive: 2, broken: 2},
+            {hospital: "سوهاج العام", dept: "الحضانات", device: "الأسرة", active: 23, inactive: 3, broken: 3},
+            {hospital: "طهطا العام", dept: "الداخلى", device: "الأسرة", active: 52, inactive: 18, broken: 70},
+            {hospital: "طهطا العام", dept: "الرعاية المركزة كبار", device: "الأسرة", active: 35, inactive: 0, broken: 35},
+            {hospital: "جرجا العام", dept: "الداخلى", device: "الأسرة", active: 26, inactive: 0, broken: 26},
+            {hospital: "البلينا المركزى", dept: "الداخلى", device: "الأسرة", active: 36, inactive: 0, broken: 36},
+            {hospital: "طما المركزى", dept: "الداخلى", device: "الأسرة", active: 69, inactive: 0, broken: 69},
+            {hospital: "المنشأة المركزى", dept: "الداخلى", device: "الأسرة", active: 37, inactive: 0, broken: 37},
+            {hospital: "ساقلته المركزى", dept: "الداخلى", device: "الأسرة", active: 75, inactive: 0, broken: 75}
+        ];
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('#nav-tabs button').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        function initDropdowns() {
+            const hospitals = [...new Set(allData.map(i => i.hospital))];
+            const depts = [...new Set(allData.map(i => i.dept))];
+            const devices = [...new Set(allData.map(i => i.device))];
+
+            ['beds-hosp', 'eq-hosp', 'xray-hosp', 'dialysis-hosp', 'blood-hosp', 'morgue-hosp'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    hospitals.forEach(h => el.innerHTML += `<option value="${h}">${h}</option>`);
+                }
+            });
+
+            ['beds-dept', 'eq-dept', 'xray-dept'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    depts.forEach(d => el.innerHTML += `<option value="${d}">${d}</option>`);
+                }
+            });
+
+            ['eq-device', 'xray-device'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    devices.forEach(dev => el.innerHTML += `<option value="${dev}">${dev}</option>`);
+                }
+            });
+        }
+
+        function renderBeds() {
+            const hosp = document.getElementById('beds-hosp').value;
+            const dept = document.getElementById('beds-dept').value;
+
+            const filtered = allData.filter(i => {
+                const isBed = i.device.includes('الأسرة') || i.device.includes('أسرة');
+                const matchH = hosp === 'ALL' || i.hospital === hosp;
+                const matchD = dept === 'ALL' || i.dept === dept;
+                return isBed && matchH && matchD;
+            });
+
+            let act = 0, inact = 0;
+            const deptMap = {};
+
+            filtered.forEach(i => {
+                act += i.active;
+                inact += i.inactive;
+                deptMap[i.dept] = (deptMap[i.dept] || 0) + i.active + i.inactive + i.broken;
+            });
+
+            document.getElementById('beds-kpi-active').innerText = act;
+            document.getElementById('beds-kpi-inactive').innerText = inact;
+            document.getElementById('beds-kpi-total').innerText = act + inact;
+
+            const container = document.getElementById('beds-dept-cards');
+            container.innerHTML = '';
+            for(let [d, count] of Object.entries(deptMap)) {
+                container.innerHTML += `
+                    <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex items-center justify-between">
+                        <span class="font-bold text-slate-700">${d}</span>
+                        <span class="bg-blue-100 text-blue-800 font-black px-3 py-1 rounded-lg">${count} سرير</span>
+                    </div>
+                `;
+            }
+        }
+
+        function renderEquipment() {
+            const hosp = document.getElementById('eq-hosp').value;
+            const dept = document.getElementById('eq-dept').value;
+            const dev = document.getElementById('eq-device').value;
+
+            const filtered = allData.filter(i => {
+                return (hosp === 'ALL' || i.hospital === hosp) &&
+                       (dept === 'ALL' || i.dept === dept) &&
+                       (dev === 'ALL' || i.device === dev);
+            });
+
+            let act = 0, inact = 0, bro = 0;
+            const tbody = document.getElementById('eq-table-body');
+            tbody.innerHTML = '';
+
+            filtered.forEach(i => {
+                act += i.active;
+                inact += i.inactive;
+                bro += i.broken;
+                const total = i.active + i.inactive + i.broken;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 font-bold">${i.hospital}</td>
+                        <td class="px-4 py-3">${i.dept}</td>
+                        <td class="px-4 py-3 text-blue-900 font-bold">${i.device}</td>
+                        <td class="px-4 py-3 text-center text-emerald-600 font-bold">${i.active}</td>
+                        <td class="px-4 py-3 text-center text-amber-600 font-bold">${i.inactive}</td>
+                        <td class="px-4 py-3 text-center text-rose-600 font-bold">${i.broken}</td>
+                        <td class="px-4 py-3 text-center font-black">${total}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('eq-kpi-active').innerText = act;
+            document.getElementById('eq-kpi-inactive').innerText = inact;
+            document.getElementById('eq-kpi-broken').innerText = bro;
+            document.getElementById('eq-kpi-total').innerText = act + inact + bro;
+        }
+
+        function renderXray() { renderEquipment(); }
+        function renderDialysis() { renderEquipment(); }
+
+        function renderBlood() {
+            const hosp = document.getElementById('blood-hosp').value;
+            const filtered = allData.filter(i => (hosp === 'ALL' || i.hospital === hosp) && i.dept === 'بنوك الدم');
+
+            let col = 0, stor = 0;
+            const tbody = document.getElementById('blood-table-body');
+            tbody.innerHTML = '';
+
+            filtered.forEach(i => {
+                col += i.active;
+                stor += i.inactive;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 font-bold">${i.hospital}</td>
+                        <td class="px-4 py-3">${i.dept}</td>
+                        <td class="px-4 py-3 text-blue-900 font-bold">${i.device}</td>
+                        <td class="px-4 py-3 text-center font-bold text-indigo-600">${i.active}</td>
+                        <td class="px-4 py-3 text-center font-bold text-amber-600">${i.inactive}</td>
+                        <td class="px-4 py-3 text-center font-black">${i.active + i.inactive}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('blood-kpi-col').innerText = col;
+            document.getElementById('blood-kpi-stor').innerText = stor;
+            document.getElementById('blood-kpi-total').innerText = col + stor;
+        }
+
+        function renderMorgue() {
+            const hosp = document.getElementById('morgue-hosp').value;
+            const filtered = allData.filter(i => (hosp === 'ALL' || i.hospital === hosp) && i.dept === 'ثلاجات الموتي');
+
+            let eyesAct = 0, eyesInact = 0, fridAct = 0, fridInact = 0;
+            const tbody = document.getElementById('morgue-table-body');
+            tbody.innerHTML = '';
+
+            filtered.forEach(i => {
+                eyesAct += i.active;
+                eyesInact += i.inactive;
+                fridAct += i.broken;
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 font-bold">${i.hospital}</td>
+                        <td class="px-4 py-3">${i.dept}</td>
+                        <td class="px-4 py-3 text-blue-900 font-bold">${i.device}</td>
+                        <td class="px-4 py-3 text-center font-bold text-emerald-600">${i.active}</td>
+                        <td class="px-4 py-3 text-center font-bold text-amber-600">${i.inactive}</td>
+                        <td class="px-4 py-3 text-center font-black">${i.active + i.inactive}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('morgue-eyes-active').innerText = eyesAct;
+            document.getElementById('morgue-eyes-inactive').innerText = eyesInact;
+            document.getElementById('morgue-fridges-active').innerText = fridAct;
+            document.getElementById('morgue-fridges-inactive').innerText = fridInact;
+        }
+
+        window.onload = () => {
+            initDropdowns();
+            renderBeds();
+            renderEquipment();
+            renderBlood();
+            renderMorgue();
+        };
+    </script>
+</body>
+</html>
